@@ -14,13 +14,14 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class YahooFinanceScraper {
+public class YahooFinanceScraper implements Scraper{
 
   private static final String STATISTICS_URL = "https://finance.yahoo.com/quote/%s/history?period1=%d&period2=%d&interval=1mo";
-  //private static final long START_TIME = 86400; // 1970 (너무 과거) 타임 아웃 가능성
+  private static final String SUMMARY_URL = "https://finance.yahoo.com/quote/%s?p=%s";
   static long now = System.currentTimeMillis() / 1000;
   private static final long START_TIME = now - 31536000;
 
+  @Override
   public ScrapedResult scrap (Company company) {
     var scrapResult = new ScrapedResult();
     scrapResult.setCompany(company);
@@ -59,7 +60,27 @@ public class YahooFinanceScraper {
     return scrapResult;
   }
 
+  @Override
   public Company scrapCompanyByTicker(String ticker){
+    String url = String.format(SUMMARY_URL, ticker, ticker);
+
+    try{
+      Connection connection = Jsoup.connect(url)
+          .userAgent(
+              "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36");
+      Document document = connection.get();
+      Element titleEle = document.getElementsByTag("h1").get(1);
+      // String title = titleEle.text().split(" - ")[1].trim();
+      String title = titleEle.text();
+
+      return Company.builder()
+                    .ticker(ticker)
+                    .name(title)
+                    .build();
+    } catch(IOException e){
+      e.printStackTrace();
+    }
+
     return null;
   }
 }
