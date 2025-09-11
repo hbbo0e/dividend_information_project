@@ -1,5 +1,6 @@
 package com.example.dividence.persist.entity;
 
+import com.example.dividence.model.Company;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,4 +22,9 @@ public class CompanyEntity {
   @Column(unique = true)
   private String ticker;
   private String name;
+
+  public CompanyEntity(Company company){
+    this.ticker = company.getTicker();
+    this.name = company.getName();
+  }
 }

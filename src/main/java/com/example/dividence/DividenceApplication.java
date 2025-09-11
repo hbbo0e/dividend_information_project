@@ -4,13 +4,10 @@ import com.example.dividence.scraper.YahooFinanceScraper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-//@SpringBootApplication
+@SpringBootApplication
 public class DividenceApplication {
   public static void main(String[] args) {
-    //SpringApplication.run(DividenceApplication.class, args);
-    YahooFinanceScraper scraper = new YahooFinanceScraper();
-    //var result = scraper.scrap(Company.builder().ticker("O").build());
-    var result = scraper.scrapCompanyByTicker("MMM");
-    System.out.println(result);
+    SpringApplication.run(DividenceApplication.class, args);
+
   }
 }
