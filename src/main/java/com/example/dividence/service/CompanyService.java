@@ -10,6 +10,8 @@ import com.example.dividence.scraper.Scraper;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -48,6 +50,9 @@ public class CompanyService {
 
     this.dividendRepository.saveAll(dividendEntityList);
     return company;
+  }
+  public Page<CompanyEntity> getAllCompany(Pageable pageable){
+    return this.companyRepository.findAll(pageable);
   }
 
 }
