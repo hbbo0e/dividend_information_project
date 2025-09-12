@@ -73,7 +73,7 @@ public class YahooFinanceScraper implements Scraper{
       Document document = connection.get();
       Element titleEle = document.getElementsByTag("h1").get(1);
       // String title = titleEle.text().split(" - ")[1].trim();
-      String title = titleEle.text();
+      String title = titleEle.text().trim();
 
       return Company.builder()
                     .ticker(ticker)
