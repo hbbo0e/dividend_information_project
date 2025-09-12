@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.apache.commons.collections4.Trie;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -53,9 +54,11 @@ public class CompanyService {
     this.dividendRepository.saveAll(dividendEntityList);
     return company;
   }
+
   public Page<CompanyEntity> getAllCompany(Pageable pageable){
     return this.companyRepository.findAll(pageable);
   }
+
   public void addAutocompleteKeyword(String keyword){
     this.trie.put(keyword, null);
   }
@@ -68,4 +71,13 @@ public class CompanyService {
   public void deleteAutocompleteKeyword(String keyword){
     this.trie.remove(keyword);
   }
+
+  public List<String> getCompanyNamesByKeyword(String keyword){
+    Pageable limit = PageRequest.of(0, 10);
+    Page<CompanyEntity> companyEntities = this.companyRepository.findByNameStartingWithIgnoreCase(keyword, limit);
+    return companyEntities.stream()
+                    .map(e -> e.getName())
+                    .collect(Collectors.toList());
+  }
+
 }
