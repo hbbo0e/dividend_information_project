@@ -1,5 +1,6 @@
 package com.example.dividence.security;
 
+import com.example.dividence.service.MemberService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -9,6 +10,9 @@ import java.util.List;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -16,6 +20,8 @@ import org.springframework.util.StringUtils;
 @RequiredArgsConstructor
 public class TokenProvider {
 
+
+  private final MemberService memberService;
   private static final String KEY_ROLES = "roles";
   private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60;
 
@@ -54,5 +60,10 @@ public class TokenProvider {
     } catch (ExpiredJwtException e){
       return e.getClaims();
     }
+  }
+
+  public Authentication getAuthentication(String jwt) {
+    UserDetails userDetails = this.memberService.loadUserByUsername(this.getUsername(jwt));
+    return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
   }
 }
