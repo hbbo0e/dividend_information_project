@@ -1,6 +1,5 @@
 package com.example.dividence;
-import com.example.dividence.model.Company;
-import com.example.dividence.scraper.YahooFinanceScraper;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;

@@ -3,13 +3,12 @@ package com.example.dividence.service;
 import com.example.dividence.model.Company;
 import com.example.dividence.model.Dividend;
 import com.example.dividence.model.ScrapedResult;
+import com.example.dividence.model.constants.CacheKey;
 import com.example.dividence.persist.CompanyRepository;
 import com.example.dividence.persist.DividendRepository;
 import com.example.dividence.persist.entity.CompanyEntity;
 import com.example.dividence.persist.entity.DividendEntity;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
@@ -22,7 +21,7 @@ public class FinanceService {
   private final CompanyRepository companyRepository;
   private final DividendRepository dividendRepository;
 
-  @Cacheable(key = "#companyName", value = "finance")
+  @Cacheable(key = "#companyName", value = CacheKey.KEY_FINANCE)
   public ScrapedResult getDividendByCompanyName(String companyName){
     // 1. 회사명을 기준으로 회사 정보 조회
     CompanyEntity company = this.companyRepository.findByName(companyName)
